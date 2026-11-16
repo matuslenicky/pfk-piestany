@@ -85,6 +85,8 @@ abbr[title] { text-decoration: none; }
 .menu-btn { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; padding: 0 14px; border: 2px solid rgba(255, 255, 255, .35); border-radius: 4px; background: transparent; color: #fff; font: 700 .9375rem/1 var(--text); cursor: pointer; }
 .menu-btn:hover { border-color: var(--yellow); }
 .side :focus-visible, .sheet :focus-visible { outline-color: var(--yellow); }
+/* pri 320 px „PFK PIEŠŤANY“ zasahovalo pod tlačidlo Menu */
+@media (max-width: 359.98px) { .side { gap: 8px; } .brand { gap: 8px; } .brand img { width: 34px; height: 34px; } .brand-n { font-size: .9rem; } .menu-btn { padding: 0 10px; } }
 /* bez JavaScriptu menu ako zoznam v lište */
 html:not(.js) .menu-btn { display: none; }
 html:not(.js) .side { height: auto; flex-wrap: wrap; padding-top: 8px; padding-bottom: 8px; }
@@ -181,6 +183,9 @@ html:not(.js) .side-nav .nav-l { display: flex; flex-wrap: wrap; gap: 0 14px; }
 @media (min-width: 1100px) {
   .hero { padding: 64px 0 72px; }
   .hero-in { grid-template-columns: minmax(0, 1fr) minmax(0, 520px); gap: 48px; align-items: center; }
+  /* vedľa karty je stĺpec pri 1100–1400 px úzky: „PIEŠŤANY“ (≈ 6,6 em) sa musí zmestiť do šírky stĺpca */
+  .hero-copy { container-type: inline-size; }
+  .hero-h { font-size: clamp(2rem, 14.5cqi, 4.6rem); }
 }
 /* záložky tímov nad kartou */
 .tabs { display: flex; gap: 4px; overflow-x: auto; scrollbar-width: none; margin: -4px calc(-1 * var(--gut)) 8px; padding: 4px var(--gut); }
@@ -327,8 +332,9 @@ a.mrow-in:hover .mr-opp { text-decoration: underline; }
 .liga { display: grid; gap: 30px; }
 @media (min-width: 900px) { .liga { grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr); gap: 48px; align-items: start; } }
 .kpis { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; margin: 0 0 22px; }
-.kpis > div { display: flex; flex-direction: column-reverse; padding: 12px; border-radius: 4px; background: var(--paper); border-bottom: 4px solid var(--azure); }
-.kpis dd { margin: 0; font-size: clamp(1.4rem, 4vw, 1.9rem); line-height: 1; }
+.kpis > div { display: flex; flex-direction: column-reverse; padding: 12px; background: var(--paper); border-bottom: 4px solid var(--azure); container-type: inline-size; }
+/* veľkosť podľa šírky dlaždice: skóre „29:19“ (≈ 3,4 em) sa zmestí aj pri 320 px a v úzkom bočnom stĺpci pri 900–1366 px */
+.kpis dd { margin: 0; font-size: clamp(1.4rem, 4vw, 1.9rem); font-size: clamp(1rem, 27cqi, 1.9rem); line-height: 1; }
 .kpis dt { margin-top: 6px; font-size: .8125rem; color: var(--muted); }
 .stat { display: flex; align-items: baseline; flex-wrap: wrap; gap: 6px 12px; margin: 0 0 18px; }
 .stat-n { font-size: 2.4rem; line-height: .95; }
@@ -340,7 +346,7 @@ a.mrow-in:hover .mr-opp { text-decoration: underline; }
 .form { list-style: none; display: flex; gap: 4px; margin: 0; padding: 0; }
 .form li { width: 32px; height: 32px; display: grid; place-items: center; border-radius: 4px; font: 900 .875rem/1 var(--wide); }
 .scorers { list-style: none; margin: 0; padding: 0; flex: 1 1 220px; }
-.scorers li { display: flex; justify-content: space-between; gap: 12px; padding: 7px 0; border-bottom: 1px solid var(--line); }
+.scorers li { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; padding: 7px 0; border-bottom: 1px solid var(--line); }
 .scorers b { font: 900 1rem/1.2 var(--wide); color: var(--navy); }
 
 /* ---- tímy ---- */
@@ -348,11 +354,12 @@ a.mrow-in:hover .mr-opp { text-decoration: underline; }
 .tgroup-h { font: 700 .8125rem/1.2 var(--text); letter-spacing: .12em; text-transform: uppercase; color: var(--muted); margin-bottom: 10px; }
 .tgrid { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; grid-template-columns: repeat(auto-fill, minmax(min(100%, 150px), 1fr)); }
 @media (min-width: 700px) { .tgrid { grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); } }
-.tcard a { display: flex; flex-direction: column; height: 100%; padding: 14px 14px 12px; border-radius: 4px; color: var(--ink); text-decoration: none; background: var(--sky); border-left: 6px solid var(--azure); }
-.tcard a:hover { background: var(--sky-2); }
+/* šikmý roh ako delenie štítu v erbe */
+.tcard a { display: flex; flex-direction: column; height: 100%; padding: 14px 14px 12px; border-radius: 4px; color: var(--ink); text-decoration: none; background: linear-gradient(112deg, var(--sky) 0 78%, var(--sky-2) 78%); }
+.tcard a:hover { background: linear-gradient(112deg, var(--sky-2) 0 78%, #c4dbf7 78%); }
 .tcard--adult { grid-column: 1 / -1; }
-.tcard--adult a { background: var(--navy); color: #fff; border-left-color: var(--yellow); }
-.tcard--adult a:hover { background: var(--navy-2); }
+.tcard--adult a { background: linear-gradient(112deg, var(--navy) 0 84%, var(--yellow) 84%); color: #fff; }
+.tcard--adult a:hover { background: linear-gradient(112deg, var(--navy-2) 0 84%, var(--yellow) 84%); }
 .tcard-n { font-size: clamp(1.25rem, 4.4vw, 1.6rem); line-height: 1; }
 .tcard--adult .tcard-n { color: #fff; }
 .tcard-l { font-size: .875rem; color: var(--muted); margin-top: 8px; }
@@ -420,7 +427,7 @@ a.mrow-in:hover .mr-opp { text-decoration: underline; }
 .ticks li { position: relative; padding: 8px 0 8px 26px; border-bottom: 1px solid rgba(255, 255, 255, .12); }
 .ticks li::before { content: ''; position: absolute; left: 2px; top: 16px; width: 12px; height: 6px; border-left: 3px solid var(--yellow); border-bottom: 3px solid var(--yellow); transform: rotate(-45deg); }
 .areal-facts { margin: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; align-self: start; }
-.areal-facts > div { display: flex; flex-direction: column; padding: 14px 12px; border-radius: 4px; background: rgba(255, 255, 255, .07); border-top: 4px solid var(--yellow); }
+.areal-facts > div { display: flex; flex-direction: column; padding: 14px 12px; background: rgba(255, 255, 255, .07); border-top: 4px solid var(--yellow); }
 .areal-facts dt { order: 3; font-size: .8125rem; color: rgba(255, 255, 255, .8); margin-top: 6px; }
 .areal-facts dd { margin: 0; font: 900 clamp(1.1rem, 4vw, 1.6rem)/1.05 var(--wide); color: var(--yellow); text-transform: uppercase; }
 .areal-facts dd.af-s { order: 2; font: 500 .8125rem/1.3 var(--text); color: #fff; text-transform: none; margin-top: 4px; }
@@ -453,11 +460,11 @@ a.mrow-in:hover .mr-opp { text-decoration: underline; }
 .partners li { display: flex; flex-direction: column; gap: 2px; padding: 12px 0; border-bottom: 1px solid var(--line); }
 .partners b { color: var(--navy); }
 .partners span { font-size: .9375rem; color: var(--muted); }
-.pct { padding: 22px 20px 8px; border-radius: 6px; background: var(--yellow-l); border-left: 6px solid var(--yellow); }
+.pct { padding: 22px 20px 8px; border-radius: 6px; background: var(--yellow-l); }
 .stad .h3 { margin-top: 0; }
 .offers { display: grid; gap: 12px; margin: 30px 0 10px; }
 @media (min-width: 900px) { .offers { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
-.offer { padding: 20px 18px 6px; border-radius: 6px; background: var(--sky); border-top: 5px solid var(--azure); }
+.offer { padding: 20px 18px 6px; background: var(--sky); border-top: 5px solid var(--azure); }
 .offer .btns { flex-direction: column; align-items: flex-start; }
 .offer .btn { max-width: 100%; overflow-wrap: anywhere; }
 .stad > .h3 { margin-top: 34px; }

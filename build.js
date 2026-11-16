@@ -194,7 +194,7 @@ ${ld}</head>
   <a class="brand" href="${R}"${route ? '' : ' aria-current="page"'}><img src="${R}img/erb-128.webp" alt="" width="52" height="52"><span class="brand-t"><span class="brand-n">PFK Piešťany</span><span class="brand-s">od roku ${club.zalozenie}</span></span></a>
   <nav class="side-nav" aria-label="Hlavné menu">${navList}</nav>
   <div class="side-soc">${socLinks()}</div>
-  <button class="menu-btn" type="button" aria-haspopup="dialog" aria-controls="sheet">${I.menu}<span>Menu</span></button>
+  <button class="menu-btn" type="button" aria-haspopup="dialog" aria-controls="sheet" aria-expanded="false">${I.menu}<span>Menu</span></button>
 </header>
 <dialog class="sheet" id="sheet" aria-label="Menu">
   <div class="sheet-in">
@@ -337,7 +337,7 @@ function arealBand(R, teaser = true) {
   return `<section class="areal" aria-labelledby="areal-h"><div class="wrap areal-in">
   <div>
     <h2 class="h2" id="areal-h">Areál pri parku</h2>
-    <p>Štadión na Kuzmányho ulici nie je len o zápasoch áčka. Klub tu prevádzkuje celý areál:</p>
+    <p>Štadión na Kuzmányho ulici neslúži len zápasom áčka. Klub tu prevádzkuje celý areál:</p>
     <ul class="ticks">${s.areal.map((x) => `<li>${esc(x)}</li>`).join('')}</ul>
     <p class="src">Zdroj: starý web klubu, Wikipédia</p>
   </div>
@@ -376,12 +376,12 @@ add('', {
     <div class="hero-copy">
       <p class="eyebrow">${esc(club.slogan)}</p>
       <h1 class="hero-h" id="hero-h"><span class="hero-k">PFK</span> Piešťany <span class="hero-y">od&nbsp;roku ${club.zalozenie}</span></h1>
-      <p class="hero-p">Muži hrajú ${esc(acc(A.leagueName))}${A.pos ? ` a po jeseni sú na ${A.pos}. mieste` : ''}. V klube je ${teams.length} tímov od prípravky U9 po áčko, domov je štadión na Kuzmányho ulici.</p>
+      <p class="hero-p">Muži hrajú ${esc(acc(A.leagueName))}${A.pos ? ` a po jeseni sú na ${A.pos}. mieste` : ''}. V klube je ${teams.length} tímov od prípravky U9 po áčko a ich domovom je štadión na Kuzmányho ulici.</p>
       <p class="hero-cta"><a class="btn btn--yellow" href="${R}zapasy/">Program a výsledky</a><a class="btn btn--ghost" href="${R}klub/">Príbeh návratu</a></p>
     </div>
     <div class="hero-card">
       <div class="tabs" role="tablist" aria-label="Zápas podľa tímu">${tabs.map(({ t }, i) => `<button type="button" role="tab" id="tab-${t.slug}" aria-controls="tp-${t.slug}" aria-selected="${i ? 'false' : 'true'}"${i ? ' tabindex="-1"' : ''}>${esc(t.short)}</button>`).join('')}</div>
-      ${tabs.map(({ t, m }, i) => `<div class="tabp" role="tabpanel" id="tp-${t.slug}" aria-labelledby="tab-${t.slug}"${i ? ' hidden' : ''}>${card(m, R, { big: true })}</div>`).join('\n      ')}
+      ${tabs.map(({ t, m }, i) => `<div class="tabp" role="tabpanel" tabindex="0" id="tp-${t.slug}" aria-labelledby="tab-${t.slug}"${i ? ' hidden' : ''}>${card(m, R, { big: true })}</div>`).join('\n      ')}
     </div>
   </div>
 </section>
@@ -516,7 +516,7 @@ add('timy/', {
   title: 'Tímy', active: 'timy/', desc: `Všetky tímy PFK Piešťany: muži, dorast, žiaci a prípravka v sezóne ${SEASON}.`,
   body: (R) => `${pageHead({ title: 'Tímy', sub: `${teams.length} tímov v sezóne ${SEASON}, od prípravky U9 po A-mužstvo.`, R, crumbs: [[null, 'Tímy']] })}
 <section class="sec sec--first"><div class="wrap">${teamGrid(R)}
-  <p class="note">Klub spolupracuje s metodikou Coerver® Coaching, ktorá sa zameriava na rozvoj individuálnych zručností hráčov vo všetkých kategóriách.</p>
+  <p class="note">Klub pracuje s metodikou Coerver® Coaching, ktorá sa zameriava na rozvoj individuálnych zručností hráčov vo všetkých kategóriách.</p>
 </div></section>`,
 });
 
@@ -562,7 +562,7 @@ ${t.squad.athletes.length || t.squad.crew.length ? `<section class="sec" aria-la
 // klub a história
 add('klub/', {
   title: 'Klub a história', active: 'klub/', desc: `${club.pravnyNazov}: futbal v Piešťanoch od roku 1912, zánik mužov v roku 2015 a návrat z VIII. do IV. ligy.`,
-  body: (R) => `${pageHead({ title: 'Klub a história', sub: `${esc(club.pravnyNazov)}. Klubové farby sú ${esc(club.farby)}.`, R, crumbs: [[null, 'Klub']] })}
+  body: (R) => `${pageHead({ title: 'Klub a história', sub: `${esc(club.pravnyNazov)}${club.pravnyNazov.endsWith('.') ? '' : '.'} Klubové farby sú ${esc(club.farby)}.`, R, crumbs: [[null, 'Klub']] })}
 <section class="sec sec--first"><div class="wrap klub-grid">
   <div class="prose">
     <h2 class="h2">Od roku 1912</h2>
@@ -611,7 +611,7 @@ add('stadion/', {
   <p class="btns"><a class="btn btn--blue" href="${mapsUrl}" rel="noopener">${I.route}Navigovať (Google Mapy)</a><a class="btn btn--line" href="${mapyUrl}" rel="noopener">${I.pin}Mapy.com</a></p>
   <p class="src">Kapacita a rozmery: Sportnet. Pôvodne bol štadión postavený pre ${num(s.povodnaKapacita)} divákov (starý web klubu, Wikipédia).</p>
   <div class="offers">
-    <article class="offer"><h2 class="h3">Prenájom umelej trávy</h2><p>Na prípravný zápas či sústredenie cez zimnú prípravu aj počas celého roka, s možnosťou osvetlenia, šatne sú samozrejmosťou. Cenník schválilo mestské zastupiteľstvo.</p></article>
+    <article class="offer"><h2 class="h3">Prenájom umelej trávy</h2><p>Umelú trávu si môžete prenajať na prípravný zápas či sústredenie v zimnej príprave aj počas celého roka, s možnosťou osvetlenia. Šatne sú samozrejmosťou. Cenník schválilo mestské zastupiteľstvo.</p></article>
     <article class="offer"><h2 class="h3">Sústredenia</h2><p>Tri trávnaté ihriská, umelá tráva, plážový volejbal, octagon 1 na 1 a vonkajšie fitness prvky, ubytovanie priamo v areáli.</p><p class="btns"><a class="btn btn--line" href="mailto:${s.sustredenia.email}">${I.mail}${esc(s.sustredenia.email)}</a><a class="btn btn--line" href="${tel(s.sustredenia.telefon)}">${I.phone}${esc(s.sustredenia.telefon)}</a></p></article>
     <article class="offer"><h2 class="h3">Športhotel a bar</h2><p>${s.hotel.miest} miest neďaleko centra a parku, ubytovanie momentálne len dlhodobo. Športhotel Bar s letnou terasou, kde sa pozerajú športové prenosy. Prenájmom izieb podporujete mládež klubu.</p><p class="btns"><a class="btn btn--line" href="${tel(s.hotel.telefon)}">${I.phone}${esc(s.hotel.telefon)}</a></p></article>
   </div>
@@ -656,7 +656,7 @@ add('ochrana-sukromia/', {
   body: (R) => `${pageHead({ title: 'Ochrana súkromia', R, crumbs: [[null, 'Ochrana súkromia']] })}
 <section class="sec sec--first"><div class="wrap prose">
   <p>Web nepoužíva cookies, analytiku ani reklamné nástroje a nenačítava nič z iných serverov. Všetky súbory vrátane písma a erbov sú uložené priamo na webe. Odkazy na Facebook, Instagram a YouTube sú obyčajné odkazy, nič sa z týchto služieb nenačítava.</p>
-  <p>Mená hráčov, trénerov a rozhodcov, výsledky, strelcov, karty a počty divákov preberáme z verejného systému Sportnet (Futbalnet), kam ich zapisujú kluby a zväzy pri zápasoch. Vek hráčov nezverejňujeme, pri mládeži uvádzame len mená a zostavy zápasov len pri dospelých.</p>
+  <p>Mená hráčov, trénerov a rozhodcov, výsledky, strelcov, karty a počty divákov preberáme z verejného systému Sportnet (Futbalnet), kam ich zapisujú kluby a zväzy pri zápasoch. Vek hráčov nezverejňujeme. Pri mládeži uvádzame len mená, zostavy zápasov len pri dospelých.</p>
   <p>Ak chcete niečo opraviť alebo odstrániť, napíšte na <a href="mailto:${club.kontakt.email}">${esc(club.kontakt.email)}</a>.</p>
 </div></section>`,
 });
