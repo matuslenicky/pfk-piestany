@@ -180,10 +180,11 @@ html:not(.js) .side-nav .nav-l { display: flex; flex-wrap: wrap; gap: 0 14px; }
 .hero-cta { display: flex; flex-wrap: wrap; gap: 10px; margin: 0; }
 .hero-card { min-width: 0; }
 .hero :focus-visible { outline-color: var(--yellow); }
-@media (min-width: 1100px) {
+/* dvojstĺpcový úvod až od 1280 px: pri 1100 px by stĺpec vedľa karty mal len 220 px a nadpis by bol menší ako na mobile */
+@media (min-width: 1280px) {
   .hero { padding: 64px 0 72px; }
   .hero-in { grid-template-columns: minmax(0, 1fr) minmax(0, 520px); gap: 48px; align-items: center; }
-  /* vedľa karty je stĺpec pri 1100–1400 px úzky: „PIEŠŤANY“ (≈ 6,6 em) sa musí zmestiť do šírky stĺpca */
+  /* vedľa karty je stĺpec pri 1280–1400 px úzky: „PIEŠŤANY“ (≈ 6,6 em) sa musí zmestiť do šírky stĺpca */
   .hero-copy { container-type: inline-size; }
   .hero-h { font-size: clamp(2rem, 14.5cqi, 4.6rem); }
 }
@@ -193,7 +194,7 @@ html:not(.js) .side-nav .nav-l { display: flex; flex-wrap: wrap; gap: 0 14px; }
 .tabs button { flex: none; min-height: 44px; min-width: 50px; padding: 6px 12px; border: 0; border-radius: 4px; background: rgba(255, 255, 255, .12); color: #fff; font: 700 .9375rem/1 var(--text); cursor: pointer; }
 .tabs button[aria-selected="true"] { background: var(--yellow); color: var(--navy); }
 .tabs button:hover:not([aria-selected="true"]) { background: rgba(255, 255, 255, .22); }
-@media (min-width: 1100px) { .tabs { margin: -4px -4px 10px; padding: 4px; flex-wrap: wrap; overflow: visible; } }
+@media (min-width: 1280px) { .tabs { margin: -4px -4px 10px; padding: 4px; flex-wrap: wrap; overflow: visible; } }
 
 .pause { background: var(--yellow-l); }
 .pause p { margin: 0; padding: 14px 0; max-width: 80ch; }
@@ -508,3 +509,6 @@ a.mrow-in:hover .mr-opp { text-decoration: underline; }
 .crumbs a { display: inline-block; padding: 11px 0; margin: -11px 0; }
 .src a { display: inline-block; padding: 11px 0; margin: -11px 0; }
 .ccard-mail a { display: inline-block; padding: 8px 0; }
+@media (max-width: 359.98px) { .step-now { display: block; width: max-content; margin: 4px 0 0; } }
+/* 1024–1279 px: jeden stĺpec vedľa bočného panela, veľkosť nadpisu podľa šírky stĺpca (vw by rátalo aj panel) */
+@media (min-width: 1024px) and (max-width: 1279.98px) { .hero-copy { container-type: inline-size; } .hero-h { font-size: clamp(2.3rem, 10cqi, 4.6rem); } }
