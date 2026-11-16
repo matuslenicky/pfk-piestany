@@ -1,0 +1,212 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//PFK Piešťany//Zapasy//SK
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+X-WR-CALNAME:PFK Piešťany – U9 B Prípravka
+X-WR-TIMEZONE:Europe/Bratislava
+BEGIN:VTIMEZONE
+TZID:Europe/Bratislava
+BEGIN:DAYLIGHT
+TZOFFSETFROM:+0100
+TZOFFSETTO:+0200
+TZNAME:CEST
+DTSTART:19700329T020000
+RRULE:FREQ=YEARLY;BYMONTH=3;BYDAY=-1SU
+END:DAYLIGHT
+BEGIN:STANDARD
+TZOFFSETFROM:+0200
+TZOFFSETTO:+0100
+TZNAME:CET
+DTSTART:19701025T030000
+RRULE:FREQ=YEARLY;BYMONTH=10;BYDAY=-1SU
+END:STANDARD
+END:VTIMEZONE
+BEGIN:VEVENT
+UID:zapas-6a4e4babd14e91f303bae071@pfk-piestany.sportnet
+DTSTAMP:20261116T192158Z
+DTSTART;TZID=Europe/Bratislava:20260829T120000
+DURATION:PT2H
+SUMMARY:U9 B: PFK Piešťany U9 B – TJ Slovan Červeník
+DESCRIPTION:Prípravka U9 ObFZ Trnava\, 1. kolo\nDomáci zápas
+LOCATION:PFK Piešťany - ihrisko č.2
+END:VEVENT
+BEGIN:VEVENT
+UID:zapas-6a4e4baad14e91f303bade8d@pfk-piestany.sportnet
+DTSTAMP:20261116T192158Z
+DTSTART;TZID=Europe/Bratislava:20260906T133000
+DURATION:PT2H
+SUMMARY:U9 B: OFK Kľačany – PFK Piešťany U9 B
+DESCRIPTION:Prípravka U9 ObFZ Trnava\, 2. kolo\nZápas vonku
+LOCATION:OFK Kľačany
+END:VEVENT
+BEGIN:VEVENT
+UID:zapas-6a4e4baad14e91f303badef3@pfk-piestany.sportnet
+DTSTAMP:20261116T192158Z
+DTSTART;TZID=Europe/Bratislava:20260914T170000
+DURATION:PT2H
+SUMMARY:U9 B: PFK Piešťany U9 B – MTK Leopoldov
+DESCRIPTION:Prípravka U9 ObFZ Trnava\, 3. kolo\nDomáci zápas
+LOCATION:PFK Piešťany - ihrisko č.2
+END:VEVENT
+BEGIN:VEVENT
+UID:zapas-6a4e4bacd14e91f303bae32a@pfk-piestany.sportnet
+DTSTAMP:20261116T192158Z
+DTSTART;TZID=Europe/Bratislava:20260919T120000
+DURATION:PT2H
+SUMMARY:U9 B: PFK Piešťany U9 B – MFK Vrbové
+DESCRIPTION:Prípravka U9 ObFZ Trnava\, 4. kolo\nDomáci zápas
+LOCATION:PFK Piešťany - ihrisko č.2
+END:VEVENT
+BEGIN:VEVENT
+UID:zapas-6a4e4babd14e91f303bae07e@pfk-piestany.sportnet
+DTSTAMP:20261116T192158Z
+DTSTART;TZID=Europe/Bratislava:20260926T100000
+DURATION:PT2H
+SUMMARY:U9 B: TJ Bojničky – PFK Piešťany U9 B
+DESCRIPTION:Prípravka U9 ObFZ Trnava\, 5. kolo\nZápas vonku
+LOCATION:TJ Bojničky
+END:VEVENT
+BEGIN:VEVENT
+UID:zapas-6a4e4bacd14e91f303bae3d7@pfk-piestany.sportnet
+DTSTAMP:20261116T192158Z
+DTSTART;TZID=Europe/Bratislava:20261003T120000
+DURATION:PT2H
+SUMMARY:U9 B: PFK Piešťany U9 B – FK Šulekovo
+DESCRIPTION:Prípravka U9 ObFZ Trnava\, 6. kolo\nDomáci zápas
+LOCATION:PFK Piešťany - ihrisko č.2
+END:VEVENT
+BEGIN:VEVENT
+UID:zapas-6a4e4badd14e91f303bae5d3@pfk-piestany.sportnet
+DTSTAMP:20261116T192158Z
+DTSTART;TZID=Europe/Bratislava:20261010T103000
+DURATION:PT2H
+SUMMARY:U9 B: OŠK Dubovany – PFK Piešťany U9 B
+DESCRIPTION:Prípravka U9 ObFZ Trnava\, 7. kolo\nZápas vonku
+LOCATION:Štadión OŠK Dubovany
+END:VEVENT
+BEGIN:VEVENT
+UID:zapas-6a4e4babd14e91f303bae1f5@pfk-piestany.sportnet
+DTSTAMP:20261116T192158Z
+DTSTART;TZID=Europe/Bratislava:20261017T120000
+DURATION:PT2H
+SUMMARY:U9 B: PFK Piešťany U9 B – OFK - Drahovce
+DESCRIPTION:Prípravka U9 ObFZ Trnava\, 8. kolo\nDomáci zápas
+LOCATION:PFK Piešťany - ihrisko č.2
+END:VEVENT
+BEGIN:VEVENT
+UID:zapas-6a4e4badd14e91f303bae687@pfk-piestany.sportnet
+DTSTAMP:20261116T192158Z
+DTSTART;TZID=Europe/Bratislava:20261024T100000
+DURATION:PT2H
+SUMMARY:U9 B: OŠK Prašník – PFK Piešťany U9 B
+DESCRIPTION:Prípravka U9 ObFZ Trnava\, 9. kolo\nZápas vonku
+LOCATION:OŠK Prašník
+END:VEVENT
+BEGIN:VEVENT
+UID:zapas-6a4e4babd14e91f303bae2d6@pfk-piestany.sportnet
+DTSTAMP:20261116T192158Z
+DTSTART;TZID=Europe/Bratislava:20261031T120000
+DURATION:PT2H
+SUMMARY:U9 B: PFK Piešťany U9 B – TJ Družstevník Chtelnica
+DESCRIPTION:Prípravka U9 ObFZ Trnava\, 10. kolo\nDomáci zápas
+LOCATION:PFK Piešťany - ihrisko č.2
+END:VEVENT
+BEGIN:VEVENT
+UID:zapas-6a4e4badd14e91f303bae6d1@pfk-piestany.sportnet
+DTSTAMP:20261116T192158Z
+DTSTART;TZID=Europe/Bratislava:20261107T120000
+DURATION:PT2H
+SUMMARY:U9 B: FC Banka – PFK Piešťany U9 B
+DESCRIPTION:Prípravka U9 ObFZ Trnava\, 11. kolo\nZápas vonku
+LOCATION:OTJ Banka
+END:VEVENT
+BEGIN:VEVENT
+UID:zapas-6a4e4baed14e91f303bae836@pfk-piestany.sportnet
+DTSTAMP:20261116T192158Z
+DTSTART;TZID=Europe/Bratislava:20270403T120000
+DURATION:PT2H
+SUMMARY:U9 B: TJ Slovan Červeník – PFK Piešťany U9 B
+DESCRIPTION:Prípravka U9 sk.A ObFZ Trnava\, 12. kolo\nZápas vonku
+END:VEVENT
+BEGIN:VEVENT
+UID:zapas-6a4e4badd14e91f303bae60d@pfk-piestany.sportnet
+DTSTAMP:20261116T192158Z
+DTSTART;TZID=Europe/Bratislava:20270410T120000
+DURATION:PT2H
+SUMMARY:U9 B: PFK Piešťany U9 B – OFK Kľačany
+DESCRIPTION:Prípravka U9 sk.A ObFZ Trnava\, 13. kolo\nDomáci zápas
+END:VEVENT
+BEGIN:VEVENT
+UID:zapas-6a4e4baed14e91f303bae922@pfk-piestany.sportnet
+DTSTAMP:20261116T192158Z
+DTSTART;TZID=Europe/Bratislava:20270417T120000
+DURATION:PT2H
+SUMMARY:U9 B: MTK Leopoldov – PFK Piešťany U9 B
+DESCRIPTION:Prípravka U9 sk.A ObFZ Trnava\, 14. kolo\nZápas vonku
+END:VEVENT
+BEGIN:VEVENT
+UID:zapas-6a4e4baed14e91f303bae858@pfk-piestany.sportnet
+DTSTAMP:20261116T192158Z
+DTSTART;TZID=Europe/Bratislava:20270424T120000
+DURATION:PT2H
+SUMMARY:U9 B: MFK Vrbové – PFK Piešťany U9 B
+DESCRIPTION:Prípravka U9 sk.A ObFZ Trnava\, 15. kolo\nZápas vonku
+END:VEVENT
+BEGIN:VEVENT
+UID:zapas-6a4e4badd14e91f303bae78b@pfk-piestany.sportnet
+DTSTAMP:20261116T192158Z
+DTSTART;TZID=Europe/Bratislava:20270501T120000
+DURATION:PT2H
+SUMMARY:U9 B: PFK Piešťany U9 B – TJ Bojničky
+DESCRIPTION:Prípravka U9 sk.A ObFZ Trnava\, 16. kolo\nDomáci zápas
+END:VEVENT
+BEGIN:VEVENT
+UID:zapas-6a4e4bafd14e91f303baecb7@pfk-piestany.sportnet
+DTSTAMP:20261116T192158Z
+DTSTART;TZID=Europe/Bratislava:20270508T120000
+DURATION:PT2H
+SUMMARY:U9 B: FK Šulekovo – PFK Piešťany U9 B
+DESCRIPTION:Prípravka U9 sk.A ObFZ Trnava\, 17. kolo\nZápas vonku
+END:VEVENT
+BEGIN:VEVENT
+UID:zapas-6a4e4baed14e91f303bae8e0@pfk-piestany.sportnet
+DTSTAMP:20261116T192158Z
+DTSTART;TZID=Europe/Bratislava:20270515T120000
+DURATION:PT2H
+SUMMARY:U9 B: PFK Piešťany U9 B – OŠK Dubovany
+DESCRIPTION:Prípravka U9 sk.A ObFZ Trnava\, 18. kolo\nDomáci zápas
+END:VEVENT
+BEGIN:VEVENT
+UID:zapas-6a4e4baed14e91f303baea2a@pfk-piestany.sportnet
+DTSTAMP:20261116T192158Z
+DTSTART;TZID=Europe/Bratislava:20270522T120000
+DURATION:PT2H
+SUMMARY:U9 B: OFK - Drahovce – PFK Piešťany U9 B
+DESCRIPTION:Prípravka U9 sk.A ObFZ Trnava\, 19. kolo\nZápas vonku
+END:VEVENT
+BEGIN:VEVENT
+UID:zapas-6a4e4bb7d14e91f303bafa0e@pfk-piestany.sportnet
+DTSTAMP:20261116T192158Z
+DTSTART;TZID=Europe/Bratislava:20270529T120000
+DURATION:PT2H
+SUMMARY:U9 B: PFK Piešťany U9 B – OŠK Prašník
+DESCRIPTION:Prípravka U9 sk.A ObFZ Trnava\, 20. kolo\nDomáci zápas
+END:VEVENT
+BEGIN:VEVENT
+UID:zapas-6a4e4bafd14e91f303baedc3@pfk-piestany.sportnet
+DTSTAMP:20261116T192158Z
+DTSTART;TZID=Europe/Bratislava:20270605T120000
+DURATION:PT2H
+SUMMARY:U9 B: TJ Družstevník Chtelnica – PFK Piešťany U9 B
+DESCRIPTION:Prípravka U9 sk.A ObFZ Trnava\, 21. kolo\nZápas vonku
+END:VEVENT
+BEGIN:VEVENT
+UID:zapas-6a4e4bafd14e91f303baee82@pfk-piestany.sportnet
+DTSTAMP:20261116T192158Z
+DTSTART;TZID=Europe/Bratislava:20270612T120000
+DURATION:PT2H
+SUMMARY:U9 B: PFK Piešťany U9 B – FC Banka
+DESCRIPTION:Prípravka U9 sk.A ObFZ Trnava\, 22. kolo\nDomáci zápas
+END:VEVENT
+END:VCALENDAR
