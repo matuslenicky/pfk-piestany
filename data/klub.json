@@ -1,0 +1,111 @@
+{
+  "_zdroj": "Ručne zapísané len zo zverejnených zdrojov (uvedené pri každej časti). Nič nedopĺňať odhadom – chýbajúce údaje dodá klub.",
+  "nazov": "PFK Piešťany",
+  "pravnyNazov": "Prvý futbalový klub Piešťany, o.z.",
+  "skratka": "PFK",
+  "mesto": "Piešťany",
+  "zalozenie": 1912,
+  "slogan": "Futbal v našom kúpeľnom meste",
+  "_slogan": "titulok starého webu pfkpiestany.sk",
+  "adresa": ["Kuzmányho 1135/15", "921 01 Piešťany"],
+  "_adresa": "Sportnet (Kuzmányho, 921 01) + číslo domu z údajov k 2 % na starom webe",
+  "ucet": "SK26 8330 0000 0028 0214 6780",
+  "_ucet": "starý web – Kontakt: bankové spojenie pre členské príspevky",
+  "kontakt": {
+    "_zdroj": "starý web – Štruktúra PFK (prezident) a Sportnet (e-mail klubu)",
+    "osoba": "Ján Stachura",
+    "funkcia": "prezident klubu",
+    "telefon": "+421 949 629 267",
+    "email": "pfkpiestany1912@gmail.com",
+    "emailOsoba": "jan.stachura90@gmail.com"
+  },
+  "socialne": {
+    "_zdroj": "odkazy v päte starého webu",
+    "facebook": "https://www.facebook.com/pfkpiestanyofficial/",
+    "instagram": "https://www.instagram.com/pfkpiestany/",
+    "youtube": "https://www.youtube.com/channel/UCAJ-w_Nrr1IqXqyGR5Edwdw"
+  },
+  "darujPercenta": {
+    "_zdroj": "starý web – Daruj 2 %",
+    "nazov": "Prvý futbalový klub Junior Piešťany",
+    "ico": "42296943",
+    "forma": "občianske združenie",
+    "sidlo": "Kuzmányho 1135/15, 921 01 Piešťany",
+    "url": "http://www.pfkpiestany.sk/domov/preverejnost/daruj-2/"
+  },
+  "sportnetUrl": "https://sportnet.sme.sk/futbalnet/k/pfk-piestany/",
+  "staryWeb": "http://www.pfkpiestany.sk/",
+  "farby": "žltá, modrá a biela",
+  "_farby": "Wikipédia: PFK Piešťany",
+  "stadion": {
+    "_zdroj": "Sportnet – údaje ihriska zo zápisu o stretnutí (sportGround); areál a pôvodná kapacita: starý web, Wikipédia",
+    "nazov": "Štadión PFK Piešťany",
+    "adresa": ["Kuzmányho", "921 01 Piešťany"],
+    "kapacita": 1200,
+    "sedenie": 890,
+    "rozmery": "105 × 68 m",
+    "povodnaKapacita": 8000,
+    "geo": [48.5959036, 17.8378387],
+    "areal": [
+      "tri trávnaté ihriská a ihrisko s umelou trávou",
+      "umelá tráva na prenájom aj v zime, s osvetlením a šatňami",
+      "plážový volejbal, octagon na hru 1 na 1 a vonkajšie fitness prvky",
+      "Športhotel so 40 miestami a Športhotel Bar s letnou terasou, kde sa pozerajú športové prenosy"
+    ],
+    "ihriska": { "PFK Piešťany": "hlavné ihrisko", "PFK Piešťany - ihrisko č.2": "ihrisko č. 2", "PFK Piešťany - UT": "umelá tráva" },
+    "sustredenia": { "_zdroj": "starý web – Sústredenia", "email": "zdenohrehor@gmail.com", "telefon": "+421 918 340 702" },
+    "hotel": { "_zdroj": "starý web – Športhotel", "telefon": "+421 951 258 398", "miest": 40 }
+  },
+  "nazvy": [
+    { "rok": "1912", "nazov": "PAFC Pöstyén", "plny": "Pöstényi atleticai és futbal club" },
+    { "rok": "1919", "nazov": "Piešťanský ŠK", "plny": "Piešťanský športový klub" },
+    { "rok": "1929", "nazov": "Piešťanský FK", "plny": "Piešťanský futbalový klub" },
+    { "rok": "okolo 1948", "nazov": "TJ Slavoj Piešťany", "plny": "Telovýchovná jednota Slavoj Piešťany" },
+    { "rok": "okolo 1988", "nazov": "PFK Piešťany", "plny": "Prvý futbalový klub Piešťany" }
+  ],
+  "_nazvy": "starý web – História PFK; Wikipédia",
+  "navrat": {
+    "_zdroj": "starý web – História PFK a Predchádzajúce sezóny; Wikipédia (sk, en); Sportnet pre sezónu 2026/27",
+    "text": "Po 102 rokoch nepretržitej činnosti mužské družstvo v roku 2015 zaniklo, klub ďalej viedol len mládež. V auguste 2016 prevzalo piešťanský futbal nové vedenie a prihlásilo mužov do najnižšej, ôsmej ligy. Odvtedy išli tri sezóny po sebe z prvého miesta o ligu vyššie.",
+    "schody": [
+      { "sezona": "2016/17", "liga": "VIII. liga", "uroven": 8, "miesto": "1.", "pozn": "27 výhier z 27 zápasov, skóre 133:12" },
+      { "sezona": "2017/18", "liga": "VII. liga", "uroven": 7, "miesto": "1.", "pozn": "27 výhier, skóre 145:25, Jozef Glos 51 gólov" },
+      { "sezona": "2018/19", "liga": "VI. liga", "uroven": 6, "miesto": "1.", "pozn": "20 výhier z 26 zápasov, skóre 86:21" },
+      { "sezona": "2019/20", "liga": "V. liga Západ", "uroven": 5, "miesto": "3.", "pozn": "" },
+      { "sezona": "2025/26", "liga": "IV. liga", "uroven": 4, "miesto": "4.", "pozn": "" }
+    ],
+    "medzitym": "Vo IV. lige hrali muži aj v sezóne 2021/22 (najlepšie 7. miesto), po reorganizácii súťaží sa vrátili do V. ligy.",
+    "_medzitym": "en Wikipédia: PFK Piešťany; tabuľka IV. liga SZ 2021/22 na starom webe",
+    "strelec": "Jozef Glos bol najlepším strelcom mužov v prvých troch sezónach po návrate: 31, 51 a 18 gólov."
+  },
+  "historia": [
+    { "rok": "1912", "text": "Založenie klubu pod názvom PAFC Pöstyén (Pöstényi atleticai és futbal club Pöstyén).", "zdroj": "starý web – História PFK" },
+    { "rok": "1937", "text": "Z klubu sa odčlenilo hokejové mužstvo ŠHK 37 Piešťany.", "zdroj": "starý web – História PFK; Wikipédia: PFK Piešťany" },
+    { "rok": "2011/12", "text": "Muži vyhrali IV. ligu (Majstrovstvá regiónu ZsFZ) a postúpili do III. ligy, kde v nasledujúcej sezóne skončili piati.", "zdroj": "starý web – História PFK" },
+    { "rok": "2015", "text": "Po 102 rokoch nepretržitej činnosti zaniklo mužské družstvo, pokračovala len mládež.", "zdroj": "starý web – História PFK" },
+    { "rok": "2016", "text": "Nové vedenie na čele s Erikom Hlavatým obnovilo mužov v VIII. lige a obnovilo aj Mestskú futbalovú ligu. Od roku 2017 sa rekonštruoval Športhotel aj areál.", "zdroj": "Wikipédia: PFK Piešťany" },
+    { "rok": "2016 – 2019", "text": "Tri postupy po sebe z prvého miesta: VIII., VII. a VI. liga.", "zdroj": "starý web – Predchádzajúce sezóny; Wikipédia: PFK Piešťany" },
+    { "rok": "2025/26", "text": "Muži skončili vo IV. lige na 4. mieste.", "zdroj": "Wikipédia: PFK Piešťany" }
+  ],
+  "partneri": [
+    { "nazov": "Coerver® Coaching / Moderní Fotbal s.r.o.", "text": "Svetová metodika rozvoja individuálnych zručností hráčov; školenia pre trénerov PFK.", "zdroj": "starý web – Coerver coaching" },
+    { "nazov": "Tavos", "text": "", "zdroj": "starý web – Partneri" }
+  ],
+  "sutaze": {
+    "_pozn": "čitateľné názvy súťaží namiesto názvov so sponzormi zo Sportnetu (kľúč = názov súťaže na Sportnete)",
+    "Majstrovstvá regiónu - IV. liga Macron | yoursport ZsFZ": "IV. liga",
+    "III. liga U19 Macron | yoursport ZsFZ": "III. liga U19 ZsFZ",
+    "III. liga U17 Macron | yoursport ZsFZ": "III. liga U17 ZsFZ",
+    "IV. liga-TAVOS-U17-ObFZ TT": "IV. liga U17 ObFZ Trnava",
+    "II. liga U15 Macron | yoursport ZsFZ": "II. liga U15 ZsFZ",
+    "III. liga U15 Macron | yoursport ZsFZ": "III. liga U15 ZsFZ",
+    "II. liga U13 Macron | yoursport ZsFZ": "II. liga U13 ZsFZ",
+    "III. liga U13 Macron | yoursport ZsFZ": "III. liga U13 ZsFZ",
+    "Prípravka U11": "Prípravka U11 ZsFZ",
+    "Prípravka-U11-sk.B-ObFZ TT": "Prípravka U11 ObFZ Trnava",
+    "Prípravka U10": "Prípravka U10 ZsFZ",
+    "Prípravka U09": "Prípravka U9 ZsFZ",
+    "Prípravka-U9-ObFZ TT": "Prípravka U9 ObFZ Trnava",
+    "Slovnaft Cup": "Slovnaft Cup"
+  }
+}
