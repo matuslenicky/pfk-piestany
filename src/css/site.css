@@ -512,3 +512,52 @@ a.mrow-in:hover .mr-opp { text-decoration: underline; }
 @media (max-width: 359.98px) { .step-now { display: block; width: max-content; margin: 4px 0 0; } }
 /* 1024–1279 px: jeden stĺpec vedľa bočného panela, veľkosť nadpisu podľa šírky stĺpca (vw by rátalo aj panel) */
 @media (min-width: 1024px) and (max-width: 1279.98px) { .hero-copy { container-type: inline-size; } .hero-h { font-size: clamp(2.3rem, 10cqi, 4.6rem); } }
+
+/* ---- fotky z Instagramu klubu ---- */
+.lvl-1 { --lvl: 1; } .lvl-2 { --lvl: 2; } .lvl-3 { --lvl: 3; } .lvl-4 { --lvl: 4; } .lvl-5 { --lvl: 5; }
+/* úvod: tímová fotka; na telefóne nad textom, na počítači v pozadí s modrým prechodom pre čitateľnosť */
+.hero--photo { padding-top: 0; }
+.hero--photo::before { display: none; }
+.hero-media { position: relative; margin: 0 0 22px; aspect-ratio: 3 / 2; overflow: hidden; }
+.hero-media::after { content: ''; position: absolute; inset: 0; background: linear-gradient(180deg, transparent 55%, var(--azure-d)); }
+.hero-photo { width: 100%; height: 100%; object-fit: cover; object-position: 50% 45%; }
+@media (min-width: 1280px) {
+  .hero--photo { padding-top: 64px; }
+  .hero-media { position: absolute; z-index: -1; inset: 0; margin: 0; aspect-ratio: auto; }
+  .hero-media::after { background: linear-gradient(90deg, rgba(11, 42, 85, .96) 0 30%, rgba(15, 82, 168, .72) 58%, rgba(15, 82, 168, .45)); }
+}
+/* mriežka príspevkov */
+.social { background: var(--navy); color: #fff; padding: 50px 0 44px; }
+.social .h2 { color: #fff; }
+.more--light { color: var(--yellow); }
+.iggrid { list-style: none; margin: 0 0 22px; padding: 0; display: grid; gap: 8px; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+@media (min-width: 700px) { .iggrid { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+@media (min-width: 1280px) { .iggrid { grid-template-columns: repeat(6, minmax(0, 1fr)); } }
+.iggrid a { position: relative; display: block; aspect-ratio: 4 / 5; overflow: hidden; border-radius: 4px; color: #fff; text-decoration: none; background: var(--navy-2); }
+.iggrid img { width: 100%; height: 100%; object-fit: cover; transition: transform .3s; }
+.iggrid a:hover img { transform: scale(1.04); }
+.iggrid a::after { content: ''; position: absolute; inset: 40% 0 0; background: linear-gradient(transparent, rgba(6, 20, 42, .92)); }
+.ig-cap { position: absolute; z-index: 1; left: 10px; right: 10px; bottom: 28px; font-size: .8125rem; font-weight: 600; line-height: 1.3; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+.ig-meta { position: absolute; z-index: 1; left: 10px; bottom: 8px; display: inline-flex; align-items: center; gap: 5px; font-size: .75rem; color: rgba(255, 255, 255, .9); }
+.ig-meta .i { width: 14px; height: 14px; color: var(--yellow); }
+.ig-play { position: absolute; z-index: 1; top: 10px; right: 10px; display: grid; place-items: center; width: 34px; height: 34px; border-radius: 50%; background: rgba(6, 20, 42, .6); }
+.ig-play .i { width: 18px; height: 18px; }
+.social-album { margin: 0 0 18px; }
+.social :focus-visible { outline-color: var(--yellow); }
+/* správa z Instagramu a galéria pri zápase */
+.report { padding: 18px 20px 6px; background: var(--sky); border-radius: 6px; }
+.report-src { display: flex; align-items: center; gap: 8px; font-size: .8125rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--azure-d); }
+.report-src .i { width: 18px; height: 18px; }
+.match-gal { grid-column: 1 / -1; }
+.gal { list-style: none; margin: 0 0 10px; padding: 0; display: grid; gap: 6px; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+@media (min-width: 700px) { .gal { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+@media (min-width: 1100px) { .gal { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+.gal a { display: block; aspect-ratio: 3 / 2; overflow: hidden; border-radius: 4px; background: var(--sky); }
+.gal img { width: 100%; height: 100%; object-fit: cover; transition: transform .3s; }
+.gal a:hover img { transform: scale(1.04); }
+/* tímová fotka na stránke áčka */
+.team-photo { margin: 0; position: relative; background: var(--navy); }
+.team-photo img { width: 100%; max-height: 560px; object-fit: cover; object-position: 50% 45%; }
+.team-photo figcaption { padding: 8px var(--gut); font-size: .8125rem; color: rgba(255, 255, 255, .85); }
+.team-photo a { color: #fff; display: inline-block; padding: 10px 0; margin: -10px 0; }
+@media (prefers-reduced-motion: reduce) { .iggrid a:hover img, .gal a:hover img { transform: none; } }

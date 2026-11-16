@@ -1,6 +1,6 @@
 // Statický generátor webu PFK Piešťany: data/ + src/ -> dist/   (node build.js; TODAY=2026-11-16 prepíše dnešný dátum)
 // Obsah: zápasy, tabuľky a súpisky zo Sportnetu (data/sportnet.json, scripts/sportnet.mjs), údaje o klube z data/klub.json
-// (len zo zverejnených zdrojov), erby súperov zo Sportnetu (scripts/logos.py). Fotky klubu: data/foto.json + media/foto-web (neskôr).
+// (len zo zverejnených zdrojov), erby súperov zo Sportnetu (scripts/logos.py), fotky a príspevky z Instagramu klubu (scripts/photos.py -> data/foto-out.json, src/img/foto).
 // Podpis vzhľadu: rebrík návratu z VIII. do IV. ligy, zápasová karta so šikmým delením ako štít erbu, azúrová a žltá z erbu.
 import fs from 'node:fs';
 import path from 'node:path';
@@ -14,7 +14,7 @@ const rd = (f, def) => { const p = path.join(ROOT, 'data', f); return fs.existsS
 const config = JSON.parse(fs.readFileSync(path.join(ROOT, 'config.json'), 'utf8'));
 const club = rd('klub.json');
 const sn = rd('sportnet.json');
-const foto = rd('foto.json', { obrazky: {} });
+const foto = rd('foto-out.json', null); // fotky a príspevky z Instagramu klubu (scripts/photos.py)
 const SPACE = config.sportnet.appSpace;
 
 // ---- pomocné -------------------------------------------------------------------------------------
@@ -108,13 +108,33 @@ function logo(space, name, R, size = 40, eager = false) {
   if (logoFile(space)) return `<img class="logo" src="${R}img/kluby/${space}.webp" alt="" width="${size}" height="${size}"${eager ? '' : ' loading="lazy"'} decoding="async">`;
   return `<span class="logo logo--txt" aria-hidden="true">${esc(initials(name))}</span>`;
 }
-// fotky klubu (doplnia sa neskôr): data/foto.json { obrazky: { kľúč: { widths: [480, 960, …], alt } } } -> dist/foto/<kľúč>-<šírka>.webp
-function pic(key, R, { sizes = '100vw', cls = '', alt, eager = false } = {}) {
-  const f = foto.obrazky?.[key];
-  if (!f) return '';
-  const set = f.widths.map((w) => `${R}foto/${key}-${w}.webp ${w}w`).join(', ');
-  const w = f.widths.at(-1);
-  return `<img class="${cls}" src="${R}foto/${key}-${w}.webp" srcset="${set}" sizes="${sizes}" alt="${esc(alt ?? f.alt ?? '')}" width="${w}" height="${f.h ? Math.round((f.h * w) / f.w) : Math.round(w * 0.5625)}"${eager ? ' fetchpriority="high"' : ' loading="lazy"'} decoding="async">`;
+// ---- fotky z Instagramu ----------------------------------------------------------------------------
+const igImg = (R, name, ws, { w, h, alt = '', sizes = '100vw', cls = '', eager = false }) => {
+  const set = ws.map((x) => `${R}img/foto/${name}-${x}.webp ${x}w`).join(', ');
+  const def = ws.length > 1 ? ws.at(-2) : ws[0];
+  return `<img${cls ? ` class="${cls}"` : ''} src="${R}img/foto/${name}-${def}.webp" srcset="${set}" sizes="${sizes}" alt="${esc(alt)}" width="${w}" height="${h}"${eager ? ' fetchpriority="high"' : ' loading="lazy"'} decoding="async">`;
+};
+const IG_HANDLE = 'pfkpiestany';
+const igFirst = (t) => (t.split('\n').find((l) => l.trim()) || '').replace(/^(REVIEW|KONIEC)\.\s*/i, '');
+// príspevok k zápasu: mládež podľa „U19 | …“ v deň zápasu, muži podľa citátu trénera alebo „KONIEC.“ najviac 2 dni po zápase
+function igReport(m) {
+  if (!foto) return null;
+  const days = (a, b) => (dObj(a) - dObj(b)) / 864e5;
+  return foto.posts.find((p) => {
+    const u = /^(U\d+)\s*\|/.exec(p.text);
+    if (u) return !m.teamObj.adult && m.teamObj.short.split(' ')[0] === u[1] && !/ B$/.test(m.teamObj.short) && p.date === m.date;
+    if (!m.teamObj.adult || !(/Jaroslav Prekop/.test(p.text) || /^KONIEC\./.test(p.text))) return false;
+    const d = days(p.date, m.date);
+    if (d < 0 || d > 2) return false;
+    return !matches.some((x) => x.team === m.team && x.id !== m.id && x.past && x.date > m.date && x.date <= p.date);
+  }) || null;
+}
+const igAlbum = (m) => (foto?.album && foto.album.match.team === m.team && foto.album.match.date === m.date ? foto.album : null);
+function gallery(a, R) {
+  return `<ul class="gal">${a.items.map((it) => `<li><a href="${R}img/foto/alb-${it.n}-${it.widths.at(-1)}.webp">${igImg(R, `alb-${it.n}`, it.widths, { w: it.w, h: it.h, alt: `${a.alt}, fotka ${it.n}`, sizes: '(min-width: 1100px) 280px, 50vw' })}</a></li>`).join('')}</ul>`;
+}
+function igGrid(R, n = 6) {
+  return `<ul class="iggrid">${foto.posts.slice(0, n).map((p) => `<li><a href="${p.url}" rel="noopener">${igImg(R, 'ig-' + p.code.replace('reel/', 'reel-'), p.thumb, { w: p.thumb.at(-1), h: Math.round(p.thumb.at(-1) * 1.25), sizes: '(min-width: 1100px) 220px, 46vw' })}${p.video ? `<span class="ig-play" aria-hidden="true">${I.play}</span>` : ''}<span class="ig-cap">${esc(igFirst(p.text) || (p.video ? 'Video' : 'Príspevok'))}</span><span class="ig-meta">${I.heart}<span class="sr">Páči sa: </span>${p.likes} · ${dShort(p.date)}</span></a></li>`).join('')}</ul>`;
 }
 
 // ---- ikony (Lucide, ISC; sociálne siete jednoduché tvary) ------------------------------------------
@@ -131,6 +151,8 @@ const I = {
   close: ico('<path d="M18 6 6 18M6 6l12 12"/>'),
   ball: ico('<circle cx="12" cy="12" r="10"/><path d="m12 7 4.2 3-1.6 5H9.4L7.8 10z"/><path d="M12 2v5M21.5 9.5 16.2 10M18 20l-3.4-5M6 20l3.4-5M2.5 9.5l5.3.5"/>'),
   up: ico('<path d="M7 17 17 7M8 7h9v9"/>'),
+  heart: ico('<path d="M19 14c1.5-1.5 3-3.2 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.8 0-3 .5-4.5 2-1.5-1.5-2.7-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4 3 5.5l7 7z"/>'),
+  play: '<svg class="i" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M8 5v14l11-7z"/></svg>',
   fb: '<svg class="i" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M13.5 21v-7.5H16l.5-3h-3V8.6c0-.9.3-1.6 1.6-1.6h1.6V4.3c-.3 0-1.2-.1-2.3-.1-2.3 0-3.9 1.4-3.9 4v2.3H8v3h2.5V21z"/></svg>',
   ig: ico('<rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r=".6" fill="currentColor"/>'),
   yt: '<svg class="i" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M21.6 7.2a2.5 2.5 0 0 0-1.8-1.8C18.2 5 12 5 12 5s-6.2 0-7.8.4A2.5 2.5 0 0 0 2.4 7.2 26 26 0 0 0 2 12a26 26 0 0 0 .4 4.8 2.5 2.5 0 0 0 1.8 1.8C5.8 19 12 19 12 19s6.2 0 7.8-.4a2.5 2.5 0 0 0 1.8-1.8A26 26 0 0 0 22 12a26 26 0 0 0-.4-4.8zM10 15V9l5.2 3z"/></svg>',
@@ -313,7 +335,7 @@ function cardPick(slug) {
 function ladder(R, { full = false } = {}) {
   const n = club.navrat;
   const steps = [...n.schody, { sezona: SEASON, liga: A.leagueName, uroven: 4, miesto: A.pos ? `${A.pos}.` : '', pozn: 'po jeseni, priebežne', now: true }];
-  return `<ol class="ladder">${steps.map((s) => `<li class="step${s.now ? ' step--now' : ''}" style="--lvl:${9 - s.uroven}">
+  return `<ol class="ladder">${steps.map((s) => `<li class="step lvl-${9 - s.uroven}${s.now ? ' step--now' : ''}">
   <span class="step-bar" aria-hidden="true"></span>
   <span class="step-s">${esc(s.sezona)}</span><span class="step-l">${esc(s.liga)}</span>
   <span class="step-p">${s.miesto ? `<b>${esc(s.miesto)}</b> miesto` : ''}${s.now ? '<span class="step-now">teraz</span>' : ''}</span>
@@ -371,7 +393,8 @@ add('', {
     const winterText = !winterNext ? '' : aNext && aNext.date === winterNext.date
       ? `Jar sa začína ${dWhen(winterNext.date)}, áčko v ten deň hrá ${aNext.home ? 'doma proti' : 'vonku na ihrisku'} ${esc(aNext.opponent)}.`
       : `Mládež začína jar ${dWhen(winterNext.date)}${aNext ? `, áčko ${dWhen(aNext.date)} ${aNext.home ? 'doma proti' : 'vonku na ihrisku'} ${esc(aNext.opponent)}` : ''}.`;
-    return `<section class="hero" aria-labelledby="hero-h">
+    return `<section class="hero${foto?.hero ? ' hero--photo' : ''}" aria-labelledby="hero-h">
+  ${foto?.hero ? `<div class="hero-media">${igImg(R, 'hero', foto.hero.widths, { w: foto.hero.w, h: foto.hero.h, alt: foto.hero.alt, sizes: '(min-width: 1024px) calc(100vw - 256px), 100vw', cls: 'hero-photo', eager: true })}</div>` : ''}
   <div class="wrap hero-in">
     <div class="hero-copy">
       <p class="eyebrow">${esc(club.slogan)}</p>
@@ -423,11 +446,12 @@ ${A.table ? `<section class="sec sec--sky" aria-labelledby="liga-h"><div class="
   ${teamGrid(R)}
 </div></section>
 ${arealBand(R)}
-<section class="social" aria-labelledby="soc-h"><div class="wrap social-in">
-  <h2 class="h3" id="soc-h">Fotky a videá zo zápasov</h2>
-  <p>Klub ich zverejňuje na sociálnych sieťach.</p>
+${foto?.posts.length ? `<section class="social" aria-labelledby="soc-h"><div class="wrap">
+  <div class="sec-head"><h2 class="h2" id="soc-h">Z Instagramu</h2><a class="more more--light" href="${club.socialne.instagram}" rel="noopener">@${IG_HANDLE}${I.arrow}</a></div>
+  ${igGrid(R)}
+  ${foto.album ? `<p class="social-album"><a class="btn btn--yellow" href="${R}${(matches.find((x) => x.team === foto.album.match.team && x.date === foto.album.match.date) || {}).url || 'zapasy/'}">Fotky zo zápasu ${esc(foto.album.title)}${I.arrow}</a></p>` : ''}
   ${socLinks('soc soc--big')}
-</div></section>`;
+</div></section>` : ''}`;
   },
 });
 
@@ -489,6 +513,8 @@ for (const m of matches) {
     </dl>
     <p class="btns">${m.score && snUrl ? `<a class="btn btn--line" href="${snUrl}" rel="noopener">${I.ext}Zápis na Sportnete</a>` : ''}${!m.past ? `<a class="btn btn--blue" href="${R}kalendar/zapas-${m.id}.ics" download>${I.cal}Pridať do kalendára</a>${m.home ? `<a class="btn btn--line" href="${mapsUrl}" rel="noopener">${I.route}Navigovať na štadión</a>` : ''}` : ''}</p>
   </div>
+  ${(() => { const rp = igReport(m); return rp ? `<div class="report"><p class="report-src">${I.ig}Instagram klubu, ${dFull(rp.date)}</p>${rp.text.replace(/^REVIEW\.\s*/i, '').split(/\n+/).filter(Boolean).map((l) => `<p>${esc(l)}</p>`).join('')}<p><a class="more" href="${rp.url}" rel="noopener">Príspevok na Instagrame${I.arrow}</a></p></div>` : ''; })()}
+  ${(() => { const a = igAlbum(m); return a ? `<div class="match-gal"><h2 class="h3">Fotky zo zápasu</h2>${gallery(a, R)}<p class="src">Fotky: <a href="${a.url}" rel="noopener">Instagram klubu @${IG_HANDLE}</a>, ${dFull(a.date)}. PFK Piešťany hralo v tmavých dresoch.</p></div>` : ''; })()}
   ${m.lineups ? `<div class="lineups"><h2 class="h3 lineups-h">Zostavy</h2>${lineupHtml(m.home ? m.lineups.our : m.lineups.opp, m.home ? club.nazov : m.opponent)}${lineupHtml(m.home ? m.lineups.opp : m.lineups.our, m.home ? m.opponent : club.nazov)}</div>` : ''}
   ${prevMeet.length ? `<div class="meet"><h2 class="h3">Ďalšie zápasy s týmto súperom v sezóne</h2>${matchList(prevMeet, R, { showTeam: false })}</div>` : ''}
 </div></section>`;
@@ -533,6 +559,7 @@ for (const t of teams) {
       const nrCount = new Map(); for (const a of t.squad.athletes) nrCount.set(a.nr, (nrCount.get(a.nr) || 0) + 1);
       const nr = (a) => (a.nr !== '' && nrCount.get(a.nr) === 1 ? a.nr : '');
       return `${pageHead({ title: t.full, sub: `${esc(t.leagueName)}${t.pos ? `, <b>${t.pos}. miesto</b> z ${t.of}` : ''}`, R, crumbs: [['timy/', 'Tímy'], [null, t.short]] })}
+${t.adult && foto?.hero ? `<figure class="team-photo">${igImg(R, 'hero', foto.hero.widths, { w: foto.hero.w, h: foto.hero.h, alt: foto.hero.alt, sizes: '(min-width: 1024px) calc(100vw - 256px), 100vw' })}<figcaption>${esc(t.full)} v sezóne ${SEASON}. Foto: <a href="${foto.hero.url}" rel="noopener">Instagram klubu</a></figcaption></figure>` : ''}
 <section class="sec sec--first"><div class="wrap team-top">
   ${pick ? `<div>${card(pick, R, { big: true })}</div>` : ''}
   <div class="team-side">
