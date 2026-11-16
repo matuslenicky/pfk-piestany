@@ -89,3 +89,23 @@ document.addEventListener('keydown', (e) => {
   if (e.key !== 'Escape') return;
   $$('[data-cal][open]').forEach((d) => { d.open = false; $('summary', d).focus(); });
 });
+
+// ---- záznam zápasu: náhľad je lokálny, prehrávač youtube-nocookie sa vloží až po kliknutí (bez JS odkaz otvorí YouTube) ----
+for (const box of $$('[data-yt]')) {
+  const play = $('[data-play]', box);
+  play.setAttribute('role', 'button');
+  play.addEventListener('keydown', (e) => { if (e.key === ' ') { e.preventDefault(); play.click(); } });
+  play.addEventListener('click', (e) => {
+    if (e.ctrlKey || e.metaKey || e.shiftKey || e.button === 1) return; // nová karta = YouTube
+    e.preventDefault();
+    const f = document.createElement('iframe');
+    f.src = `https://www.youtube-nocookie.com/embed/${encodeURIComponent(box.dataset.yt)}?autoplay=1&rel=0&playsinline=1`;
+    f.title = box.dataset.title;
+    f.allow = 'autoplay; encrypted-media; picture-in-picture; fullscreen';
+    f.allowFullscreen = true;
+    f.referrerPolicy = 'strict-origin-when-cross-origin';
+    box.replaceChildren(f);
+    box.classList.add('is-on');
+    f.focus();
+  });
+}
