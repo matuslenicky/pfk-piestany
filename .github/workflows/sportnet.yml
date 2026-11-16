@@ -1,6 +1,7 @@
 # Výsledky zo Sportnetu podľa zápasov: cez deň sa každých 20 min pozrie do uloženého rozpisu (bez kontaktu so Sportnetom)
 # a výsledky stiahne len vtedy, keď sa nejaký zápas skončil a jeho výsledok ešte nemáme (scripts/sportnet.mjs --if-due).
 # Raz denne stiahne celý rozpis (presunuté zápasy, opravy zápisov, tabuľky, súpisky) a nasadí aj bez zmeny, aby sedel „dnes“.
+# Záznamy zápasov z YouTube kanála klubu (scripts/youtube.mjs) sa kontrolujú pri každom behu, nové video spustí nasadenie.
 # Erby nových súperov stiahne scripts/logos.py. Fotky klubu (media/foto-web, zatiaľ žiadne) sa obnovia z nasadeného webu.
 # Ručné spustenie (celé stiahnutie): Actions → Sportnet výsledky → Run workflow.
 name: Sportnet výsledky
@@ -53,14 +54,41 @@ jobs:
           path: data/sportnet.json
           key: sportnet-${{ github.run_id }}
 
+      # priradené videá a náhľady z predošlých behov (RSS kanála má len posledných 15 videí)
+      - uses: actions/cache/restore@v4
+        with:
+          path: |
+            .cache/videa.json
+            src/img/video
+          key: videa-${{ github.run_id }}
+          restore-keys: videa-
+
+      - name: Záznamy zápasov z YouTube
+        id: yt
+        env:
+          VIDEA_CACHE: .cache/videa.json
+        run: |
+          before=$(sha256sum data/videa.json 2>/dev/null | cut -d' ' -f1)
+          node scripts/youtube.mjs
+          after=$(sha256sum data/videa.json 2>/dev/null | cut -d' ' -f1)
+          if [ "$before" != "$after" ]; then echo "deploy=1" >> "$GITHUB_OUTPUT"; fi
+
+      - uses: actions/cache/save@v4
+        if: always()
+        with:
+          path: |
+            .cache/videa.json
+            src/img/video
+          key: videa-${{ github.run_id }}
+
       - name: Erby nových súperov
-        if: steps.sn.outputs.deploy == '1'
+        if: steps.sn.outputs.deploy == '1' || steps.yt.outputs.deploy == '1'
         run: |
           python3 -m pip install --quiet pillow
           python3 scripts/logos.py
 
       - name: Pripraviť gh-pages a fotky
-        if: steps.sn.outputs.deploy == '1'
+        if: steps.sn.outputs.deploy == '1' || steps.yt.outputs.deploy == '1'
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
@@ -70,14 +98,15 @@ jobs:
           if [ -d .pages/foto ]; then cp -r .pages/foto media/foto-web; fi
 
       - name: Zostaviť a nasadiť
-        if: steps.sn.outputs.deploy == '1'
+        if: steps.sn.outputs.deploy == '1' || steps.yt.outputs.deploy == '1'
         env:
           SKIP_SPORTNET: '1'
+          SKIP_YOUTUBE: '1'
           DEPLOY_MSG: Automatická aktualizácia výsledkov zo Sportnetu
         run: node scripts/deploy.mjs
 
       - name: Spustiť zostavenie GitHub Pages
-        if: steps.sn.outputs.deploy == '1'
+        if: steps.sn.outputs.deploy == '1' || steps.yt.outputs.deploy == '1'
         env:
           GH_TOKEN: ${{ github.token }}
         run: gh api -X POST "repos/${{ github.repository }}/pages/builds" || true

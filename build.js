@@ -15,6 +15,7 @@ const config = JSON.parse(fs.readFileSync(path.join(ROOT, 'config.json'), 'utf8'
 const club = rd('klub.json');
 const sn = rd('sportnet.json');
 const foto = rd('foto-out.json', null); // fotky a príspevky z Instagramu klubu (scripts/photos.py)
+const videa = rd('videa.json', { videa: {} }).videa; // záznamy zápasov z YouTube kanála klubu (scripts/youtube.mjs)
 const SPACE = config.sportnet.appSpace;
 
 // ---- pomocné -------------------------------------------------------------------------------------
@@ -167,6 +168,7 @@ const sha256 = (s) => `'sha256-${crypto.createHash('sha256').update(s, 'utf8').d
 const CONNECT = ["'self'", ...(config.supabase?.url ? [new URL(config.supabase.url).origin] : [])];
 const CSP = [
   "default-src 'none'", `script-src 'self' ${sha256(HEAD_JS)}`, "style-src 'self'", "img-src 'self' data:", "font-src 'self'",
+  "frame-src https://www.youtube-nocookie.com", // záznam zápasu sa vloží až po kliknutí na náhľad (site.mjs)
   `connect-src ${CONNECT.join(' ')}`, "base-uri 'none'", "form-action 'none'", "object-src 'none'", "manifest-src 'self'",
 ].join('; ');
 
@@ -270,6 +272,7 @@ function card(m, R, { big = false, label = '', self = false } = {}) {
   else { mid = `<span class="sr">Výkop o </span>${esc(m.time || '–')}`; note = `<span class="cd" data-kickoff="${isoLocal(m.date, m.time)}" hidden></span>`; }
   const links = [];
   if (m.score && m.detail && !self) links.push(`<a class="mc-a" href="${R}${m.url}">Priebeh a zostavy${I.arrow}</a>`);
+  if (videa[m.id] && !self) links.push(`<a class="mc-a" href="${R}${m.url}#zaznam">${I.play}Záznam zápasu</a>`);
   if (!m.past) links.push(`<a class="mc-a" href="${R}kalendar/zapas-${m.id}.ics" download>${I.cal}Do kalendára</a>`);
   const meta = [esc(m.comp) + (m.roundName ? `, ${esc(m.roundName)}` : ''), m.venue ? esc(venueName(m.venue)) : '', m.audience ? plural(m.audience, 'divák', 'diváci', 'divákov') : ''].filter(Boolean);
   return `<article class="mc${big ? ' mc--big' : ''}">
@@ -293,7 +296,7 @@ function matchRow(m, R, { showTeam = true } = {}) {
   <span class="mr-date"><span class="mr-day">${dDay(m.date)}</span><time datetime="${m.date}">${dShort(m.date)}</time></span>
   ${logo(m.oppSpace, m.opponent, R, 30)}
   <span class="mr-main"><span class="mr-opp">${esc(m.opponent)}</span>
-  <span class="mr-sub">${showTeam ? `<b class="mr-team">${esc(m.teamObj.short)}</b>` : ''}${m.home ? 'doma' : 'vonku'}, ${esc(m.cup ? m.comp : m.roundName || m.comp)}</span></span>
+  <span class="mr-sub">${showTeam ? `<b class="mr-team">${esc(m.teamObj.short)}</b>` : ''}${m.home ? 'doma' : 'vonku'}, ${esc(m.cup ? m.comp : m.roundName || m.comp)}${videa[m.id] ? `<span class="mr-vid">${I.play}video</span>` : ''}</span></span>
   ${right}
 </${tag}></li>`;
 }
@@ -485,6 +488,22 @@ function lineupHtml(l, title) {
   const li = (p) => `<li><span class="ln-nr">${esc(p.nr)}</span><span>${esc(p.name)}${p.c ? ' <abbr class="cap" title="kapitán">C</abbr>' : ''}</span></li>`;
   return `<div class="lineup"><h3 class="h4">${esc(title)}</h3><ol class="ln">${l.start.map(li).join('')}</ol>${l.subs.length ? `<p class="ln-h">Náhradníci</p><ol class="ln ln--subs">${l.subs.map(li).join('')}</ol>` : ''}${l.coach ? `<p class="ln-coach">Tréner: ${esc(l.coach)}</p>` : ''}</div>`;
 }
+// záznam zápasu: lokálny náhľad, YouTube (youtube-nocookie) sa načíta až po kliknutí – site.mjs vymení náhľad za prehrávač
+function videoBlock(m, name, R) {
+  const v = videa[m.id];
+  if (!v) return '';
+  const t = v.thumbs || [320];
+  const big = t.at(-1);
+  const watch = `https://www.youtube.com/watch?v=${v.id}`;
+  return `<section class="vid" id="zaznam" aria-labelledby="zaznam-h">
+    <h2 class="h3" id="zaznam-h">Záznam zápasu</h2>
+    <div class="vid-box" data-yt="${esc(v.id)}" data-title="${esc(`Záznam zápasu ${name}`)}">
+      <img src="${R}img/video/${v.id}-${big}.webp" srcset="${t.map((w) => `${R}img/video/${v.id}-${w}.webp ${w}w`).join(', ')}" sizes="(min-width: 1100px) 540px, calc(100vw - 32px)" alt="" width="${big}" height="${Math.round(big * 9 / 16)}" loading="lazy" decoding="async">
+      <a class="vid-play" href="${watch}" rel="noopener" data-play><span class="vid-btn" aria-hidden="true">${I.play}</span><span class="vid-l">Prehrať celý zápas<span class="sr">: ${esc(name)}</span></span></a>
+    </div>
+    <p class="vid-src">Video z YouTube kanála PFK Piešťany, ${dFull(v.date)}. Prehrávač sa načíta z YouTube až po kliknutí. <a href="${watch}" rel="noopener">Pozrieť na YouTube</a></p>
+  </section>`;
+}
 for (const m of matches) {
   if (m.past && !m.detail) continue;
   const name = m.home ? `${club.nazov} – ${m.opponent}` : `${m.opponent} – ${club.nazov}`;
@@ -502,7 +521,7 @@ for (const m of matches) {
       const snUrl = sn.matches.find((x) => x.id === m.id)?.url;
       return `${pageHead({ title: name, sub: `${esc(m.teamObj.full)}, ${esc(m.comp)}${m.roundName ? `, ${esc(m.roundName)}` : ''}`, R, crumbs: [['zapasy/', 'Zápasy'], [null, dShort(m.date) + ' ' + m.opponent]] })}
 <section class="sec sec--first"><div class="wrap match">
-  <div class="match-card">${card(m, R, { big: true, self: true, label: m.score ? 'Konečný výsledok' : 'Zápas' })}</div>
+  <div class="match-card">${card(m, R, { big: true, self: true, label: m.score ? 'Konečný výsledok' : 'Zápas' })}${videoBlock(m, name, R)}</div>
   <div class="match-info">
     ${ev.length ? `<h2 class="h3">Priebeh zápasu</h2><ol class="evs">${ev.map((e) => `<li class="ev ev--${evSide(e)}"><span class="ev-min">${esc(e.min)}′</span>${evIcon(e)}<span>${evText(e)}<small>${esc(evTeam(e))}</small></span></li>`).join('')}</ol>` : m.score ? '<p>Zápis o stretnutí neobsahuje góly ani karty.</p>' : ''}
     <dl class="facts">
@@ -682,7 +701,8 @@ add('ochrana-sukromia/', {
   title: 'Ochrana súkromia', desc: 'Ako web PFK Piešťany pracuje s údajmi.',
   body: (R) => `${pageHead({ title: 'Ochrana súkromia', R, crumbs: [[null, 'Ochrana súkromia']] })}
 <section class="sec sec--first"><div class="wrap prose">
-  <p>Web nepoužíva cookies, analytiku ani reklamné nástroje a nenačítava nič z iných serverov. Všetky súbory vrátane písma a erbov sú uložené priamo na webe. Odkazy na Facebook, Instagram a YouTube sú obyčajné odkazy, nič sa z týchto služieb nenačítava.</p>
+  <p>Web nepoužíva cookies, analytiku ani reklamné nástroje a sám nenačítava nič z iných serverov. Všetky súbory vrátane písma, erbov a náhľadov videí sú uložené priamo na webe. Odkazy na Facebook, Instagram a YouTube sú obyčajné odkazy.</p>
+  <p>Záznamy zápasov sú na YouTube kanáli klubu. Prehrávač sa načíta až vtedy, keď na náhľad videa kliknete, a to cez youtube-nocookie.com (rozšírený režim ochrany súkromia). Až vtedy YouTube (Google) dostane vašu IP adresu a môže uložiť údaje podľa svojich pravidiel.</p>
   <p>Mená hráčov, trénerov a rozhodcov, výsledky, strelcov, karty a počty divákov preberáme z verejného systému Sportnet (Futbalnet), kam ich zapisujú kluby a zväzy pri zápasoch. Vek hráčov nezverejňujeme. Pri mládeži uvádzame len mená, zostavy zápasov len pri dospelých.</p>
   <p>Ak chcete niečo opraviť alebo odstrániť, napíšte na <a href="mailto:${club.kontakt.email}">${esc(club.kontakt.email)}</a>.</p>
 </div></section>`,
@@ -736,7 +756,7 @@ function writeAdminDemo() {
     matches: matches.map((m) => ({
       id: m.id, team: m.team, date: m.date, time: m.time, home: m.home, opponent: m.opponent, competition: m.comp, part: '',
       round: (/\d+/.exec(m.round) || [''])[0], played: m.past, score: m.score, goals: m.goals || [], cards: m.cards || [],
-      venue: (m.venue || '').replace(/\s+/g, ' '), url: snById[m.id]?.url || null, gallery: null, video: null,
+      venue: (m.venue || '').replace(/\s+/g, ' '), url: snById[m.id]?.url || null, gallery: null, video: videa[m.id] ? { id: videa[m.id].id, title: videa[m.id].title } : null,
     })),
     rosters: Object.fromEntries(teams.map((t) => [t.slug, people(t).map(({ name, number, photo }) => ({ name, number, photo }))])),
     news: [],

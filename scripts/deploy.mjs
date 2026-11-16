@@ -17,6 +17,10 @@ const out = (cmd, args, cwd = ROOT) => execFileSync(cmd, args, { cwd, encoding: 
 if (!process.env.SKIP_SPORTNET) {
   try { run(process.execPath, ['scripts/sportnet.mjs']); } catch { console.warn('Sportnet nie je dostupný – nasadzujem s uloženými výsledkami'); }
 }
+// záznamy zápasov z YouTube kanála klubu (pri výpadku YouTube ostanú uložené; workflow ich sťahuje sám so SKIP_YOUTUBE=1)
+if (!process.env.SKIP_YOUTUBE) {
+  try { run(process.execPath, ['scripts/youtube.mjs']); } catch { console.warn('YouTube nie je dostupný – nasadzujem s uloženými videami'); }
+}
 
 // 1. zostavenie s cestou projektu na github.io (týka sa 404.html)
 run(process.execPath, ['build.js'], { env: { ...process.env, BASE_PATH: BASE } });
