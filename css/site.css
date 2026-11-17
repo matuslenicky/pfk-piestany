@@ -283,6 +283,13 @@ a.slant:hover .slant-n { text-decoration: underline; }
 .slant-k b { color: var(--azure-d); }
 .slant-t { display: flex; align-items: center; padding: 0 14px 0 6px; }
 .slant-t > span { display: inline-block; padding: 7px 12px 6px; background: var(--yellow); color: var(--navy); font: 800 .9375rem/1 var(--wide); transform: skewX(-14deg); white-space: nowrap; }
+/* úzky telefón: čas výkopu pod názov súpera, inak by názvy (Telovýchovná, Trenčianske) delilo v strede slova */
+@media (max-width: 379.98px) {
+  .slant { grid-template-columns: 104px minmax(0, 1fr); grid-template-areas: "d o" "d t"; }
+  .slant-d { grid-area: d; }
+  .slant-o { grid-area: o; padding-bottom: 6px; }
+  .slant-t { grid-area: t; padding: 0 10px 10px 14px; }
+}
 .mlist--para { display: grid; gap: 10px 12px; grid-template-columns: repeat(auto-fill, minmax(min(100%, 150px), 1fr)); padding: 0 6px; }
 .para { display: block; height: 100%; padding: 12px 14px 12px; background: var(--azure-d); color: #fff; text-decoration: none; transform: skewX(-8deg); }
 .para--l { background: var(--navy); }
