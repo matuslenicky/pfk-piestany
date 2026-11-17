@@ -71,7 +71,8 @@ const teams = sn.teams.map((t) => {
 // tímy bez zápasu v sezóne (napr. prihlásený B-tím bez súťaže) sa na webe neukazujú
 for (let i = teams.length - 1; i >= 0; i--) if (!sn.matches.some((m) => m.team === teams[i].slug)) teams.splice(i, 1);
 const bySlug = Object.fromEntries(teams.map((t) => [t.slug, t]));
-const matches = sn.matches.map((m) => {
+// kolá bez súpera (voľno) sa v zoznamoch nezobrazujú, inak by ostal prázdny riadok
+const matches = sn.matches.filter((m) => String(m.opponent || '').trim()).map((m) => {
   const t = bySlug[m.team];
   const past = m.played || m.date < TODAY;
   let gf = null, ga = null, res = null;
@@ -290,10 +291,11 @@ function matchRow(m, R, { showTeam = true } = {}) {
   const href = m.detail || !m.past ? ` href="${R}${m.url}"` : '';
   const tag = href ? 'a' : 'div';
   const comp = esc(m.cup ? m.comp : m.roundName || m.comp);
+  const opp = esc(m.opponent).replace(/\//g, '/<wbr>'); // „Saliby/Tomášikovo“: zlom za lomkou, nie v strede slova
   if (!m.past) {
     return `<li class="mrow" data-team="${m.team}" data-where="${m.home ? 'doma' : 'vonku'}"><${tag} class="slant"${href}>
   <span class="slant-d"><time datetime="${m.date}">${dShort(m.date)}</time><span>${dDay(m.date)}</span></span>
-  <span class="slant-o"><span class="slant-n">${esc(m.opponent)}</span><span class="slant-k">${showTeam ? `<b>${esc(m.teamObj.short)}</b> · ` : ''}${m.home ? 'doma' : 'vonku'}, ${comp}</span></span>
+  <span class="slant-o"><span class="slant-n">${opp}</span><span class="slant-k">${showTeam ? `<b>${esc(m.teamObj.short)}</b> · ` : ''}${m.home ? 'doma' : 'vonku'}, ${comp}</span></span>
   <span class="slant-t"><span><span class="sr">výkop </span>${esc(m.time || '–')}</span></span>
 </${tag}></li>`;
   }
@@ -301,7 +303,7 @@ function matchRow(m, R, { showTeam = true } = {}) {
   <span class="para-in">
     <span class="para-k"><time datetime="${m.date}">${dShort(m.date)}</time>${showTeam ? ` · ${esc(m.teamObj.short)}` : ''} · ${m.home ? 'doma' : 'vonku'}</span>
     <span class="para-s">${m.score ? `<span class="sr">${RES[m.res]}, </span>${esc(m.score)}` : '–'}</span>
-    <span class="para-o">${esc(m.opponent)}</span>
+    <span class="para-o">${opp}</span>
   </span>
 </${tag}></li>`;
 }
