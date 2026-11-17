@@ -175,7 +175,7 @@ const CSP = [
 
 const NAV = [['zapasy/', 'Zápasy'], ['tabulky/', 'Tabuľky'], ['timy/', 'Tímy'], ['klub/', 'Klub a história'], ['stadion/', 'Štadión a areál'], ['kontakt/', 'Kontakt']];
 const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${club.stadion.geo.join(',')}`;
-const mapyUrl = `https://mapy.com/s/?q=${club.stadion.geo.join(',')}`;
+const mapyUrl = `https://mapy.com/fnc/v1/showmap?mapset=basic&amp;center=${club.stadion.geo[1]},${club.stadion.geo[0]}&amp;zoom=16&amp;marker=true`; // mapy.com/s/?q= vracia 404
 const DESC = `${club.nazov} – futbal v kúpeľnom meste od roku ${club.zalozenie}. Zápasy, výsledky, tabuľky a súpisky áčka, dorastu, žiakov aj prípravky.`;
 
 function layout({ route, title, desc, body, active, bodyClass = '' }) {
